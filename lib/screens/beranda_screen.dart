@@ -45,7 +45,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer),
-            label: 'Penawaran',
+            label: 'Penugasan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

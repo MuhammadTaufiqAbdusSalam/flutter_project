@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'SERTIFIKASI',
+                  'SIERTIFY',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

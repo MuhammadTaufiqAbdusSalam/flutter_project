@@ -29,7 +29,7 @@ class _LandingPageState extends State<LandingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'SERTIFIKASI',
+                  'SIERTIFY',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,

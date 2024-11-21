@@ -63,7 +63,7 @@ class _PenawaranScreenState extends State<PenawaranScreen> {
                 children: [
                   // Title
                   Text(
-                    "Penawaran Pelatihan & Sertifikasi",
+                    "Penugasan Pelatihan & Sertifikasi",
                     style: TextStyle(
                       fontSize: 21,
                       fontWeight: FontWeight.bold,
