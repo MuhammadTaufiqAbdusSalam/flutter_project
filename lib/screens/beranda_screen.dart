@@ -120,25 +120,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logic for editing profile
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 58, 138, 207),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.edit, color: Colors.white, size: 17),
-                          SizedBox(width: 8), // Spacing between icon and text
-                          Text(
-                            'Edit Profil',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    )
+                    
                   ],
                 ),
               ],

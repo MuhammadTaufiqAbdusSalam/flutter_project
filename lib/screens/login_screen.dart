@@ -22,15 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    if (selectedUserType == null) {
-      setState(() {
-        errorMessage = "Please select a user type.";
-      });
-      return;
-    }
+    
 
     // Memeriksa jenis pengguna dan kredensial
-    if ((selectedUserType == "Dosen" && username == "dosen" && password == "123")) {
+    if ((username == "dosen" && password == "123")) {
       setState(() {
         errorMessage = null;
       });
@@ -97,25 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Jenis Pengguna',
-                    border: OutlineInputBorder(),
-                  ),
-                  value: selectedUserType,
-                  items: ['Dosen']
-                      .map((type) => DropdownMenuItem(
-                            value: type,
-                            child: Text(type),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedUserType = value;
-                    });
-                  },
-                ),
+                
                 SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,

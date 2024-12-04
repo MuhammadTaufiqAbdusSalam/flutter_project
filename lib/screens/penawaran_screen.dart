@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'detail_penugasan_pelatihan.dart';
+import 'detail_penugasan_sertifikasi.dart';
 
 class PenawaranScreen extends StatefulWidget {
   @override
@@ -38,18 +40,31 @@ class _PenawaranScreenState extends State<PenawaranScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Select items based on the category
-    List<Map<String, String>> displayedItems = selectedCategory == 'Sertifikasi'
-        ? sertifikasiItems
-        : pelatihanItems;
+    // Pilih data berdasarkan kategori yang dipilih
+    List<Map<String, String>> displayedItems =
+        selectedCategory == 'Sertifikasi' ? sertifikasiItems : pelatihanItems;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          "Penugasan Pelatihan & Sertifikasi",
+          style: TextStyle(
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: Stack(
         children: [
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background.png', // Update with the path of your background image
+              'assets/background.png', // Ganti dengan path gambar latar belakang Anda
               fit: BoxFit.cover,
             ),
           ),
@@ -61,17 +76,6 @@ class _PenawaranScreenState extends State<PenawaranScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
-                  Text(
-                    "Penugasan Pelatihan & Sertifikasi",
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-
                   // Search Bar
                   TextField(
                     decoration: InputDecoration(
@@ -86,148 +90,165 @@ class _PenawaranScreenState extends State<PenawaranScreen> {
                   ),
                   SizedBox(height: 16),
 
-                  // White Box for Dropdowns and List Items
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Dropdown Menus for Categories and Year
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Category Dropdown
-                            Expanded(
-                              child: DropdownButtonFormField<String>(
-                                value: selectedCategory,
-                                dropdownColor: Colors.teal,
-                                items: ['Sertifikasi', 'Pelatihan']
-                                    .map((category) => DropdownMenuItem<String>(
-                                          value: category,
-                                          child: Text(
-                                            category,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ))
-                                    .toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCategory = value!;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
+                  // Dropdown dan List Items
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          // Dropdown Menus
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Category Dropdown
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedCategory,
+                                  dropdownColor: Colors.teal,
+                                  items: ['Sertifikasi', 'Pelatihan']
+                                      .map((category) =>
+                                          DropdownMenuItem<String>(
+                                            value: category,
+                                            child: Text(
+                                              category,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCategory = value!;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.teal,
+                                    hintStyle:
+                                        TextStyle(color: Colors.white),
                                   ),
-                                  filled: true,
-                                  fillColor: Colors.teal,
-                                  hintStyle: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 16),
+                              SizedBox(width: 16),
 
-                            // Year Dropdown
-                            Expanded(
-                              child: DropdownButtonFormField<String>(
-                                value: selectedYear,
-                                dropdownColor: Colors.teal,
-                                items: ['2023', '2022', '2021']
-                                    .map((year) => DropdownMenuItem<String>(
-                                          value: year,
-                                          child: Text(
-                                            year,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ))
-                                    .toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedYear = value!;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
+                              // Year Dropdown
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  value: selectedYear,
+                                  dropdownColor: Colors.teal,
+                                  items: ['2023', '2022', '2021']
+                                      .map((year) => DropdownMenuItem<String>(
+                                            value: year,
+                                            child: Text(
+                                              year,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedYear = value!;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.teal,
+                                    hintStyle:
+                                        TextStyle(color: Colors.white),
                                   ),
-                                  filled: true,
-                                  fillColor: Colors.teal,
-                                  hintStyle: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
+                            ],
+                          ),
+                          SizedBox(height: 16),
 
-                        // List of items
-                        ListView.builder(
-                          itemCount: displayedItems.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final item = displayedItems[index];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              color: Colors.white.withOpacity(0.9),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: ListTile(
-                                title: Text(
-                                  item['title']!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                          // List of items
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: displayedItems.length,
+                              itemBuilder: (context, index) {
+                                final item = displayedItems[index];
+                                return Card(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  color: Colors.white.withOpacity(0.9),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
+                                  child: ListTile(
+                                    title: Text(
+                                      item['title']!,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    subtitle: Text(
                                       item['description']!,
                                       style: TextStyle(color: Colors.black54),
                                     ),
-                                    SizedBox(height: 4),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.teal[50],
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        item['date']!,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.teal,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                    trailing: Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.teal,
                                     ),
-                                  ],
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.teal,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                                    onTap: () {
+                                      // Navigasi ke layar detail
+                                      if (selectedCategory == 'Sertifikasi') {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailPenugasanSertifikasi(
+                                              title: item['title']!,
+                                              description: item['description']!,
+                                              date: item['date']!,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailPenugasanPelatihan(
+                                              title: item['title']!,
+                                              description: item['description']!,
+                                              date: item['date']!,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

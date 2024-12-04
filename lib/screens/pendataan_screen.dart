@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'detail_pendataan_sertifikasi.dart'; // Import layar detail sertifikasi
+import 'detail_pendataan_pelatihan.dart'; // Import layar detail pelatihan
 
 class PendataanScreen extends StatefulWidget {
   @override
@@ -218,9 +220,33 @@ class _PendataanScreenState extends State<PendataanScreen> {
                                     ),
                                   ],
                                 ),
-                                trailing: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.teal,
+                                trailing: IconButton(
+                                  icon: Icon(Icons.arrow_forward, color: Colors.teal),
+                                  onPressed: () {
+                                    if (selectedCategory == 'Sertifikasi') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailSertifikasiScreen(
+                                            title: item['title']!,
+                                            description: item['description']!,
+                                            date: item['date']!,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailPelatihanScreen(
+                                            title: item['title']!,
+                                            description: item['description']!,
+                                            date: item['date']!,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
                             );
