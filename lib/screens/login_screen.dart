@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '/screens/beranda_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'beranda_screen.dart';
 
-
-// LoginScreen StatefulWidget
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -13,31 +13,57 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String? selectedUserType;
   String? errorMessage;
-  bool _obscurePassword = true; // State variable for password visibility
+  bool _obscurePassword = true;
+  bool _isLoading = false;
 
-  // Fungsi login yang memeriksa apakah kredensial benar atau tidak
-  void _login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+      errorMessage = null;
+    });
 
-    
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
 
-    // Memeriksa jenis pengguna dan kredensial
-    if ((username == "dosen" && password == "123")) {
-      setState(() {
-        errorMessage = null;
-      });
-
-      // Navigasi ke layar beranda setelah login berhasil
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BerandaScreen()),
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+        }),
       );
-    } else {
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['message'] == 'Login successful') {
+          // Jika login berhasil, navigasi ke BerandaScreen dengan data username
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BerandaScreen(username: data['user']['username']),
+            ),
+          );
+        } else {
+          setState(() {
+            errorMessage = data['message'] ?? 'Login failed.';
+          });
+        }
+      } else {
+        setState(() {
+          errorMessage = 'Server error. Please try again later.';
+        });
+      }
+    } catch (e) {
       setState(() {
-        errorMessage = "Invalid username or password.";
+        errorMessage = 'An error occurred. Please check your connection.';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
       });
     }
   }
@@ -53,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'SIERTIFY',
                   style: TextStyle(
                     fontSize: 24,
@@ -61,46 +87,42 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.teal,
                   ),
                 ),
-                SizedBox(height: 16),
-                // Tambahkan gambar logo
+                const SizedBox(height: 16),
                 Image.asset(
-                  'assets/logo.png', // Ganti dengan path ke gambar Anda
-                  height: 100,
-                  width: 100,
+                  'assets/siertify.png',
+                  height: 168,
+                  width: 168,
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'Login ke Akun',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'Masukkan email Anda untuk masuk aplikasi',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
+                const Text(
+                  'Masukkan username dan password Anda',
+                  style: TextStyle(color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 TextField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Username',
                     hintText: 'Masukkan username Anda',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Masukkan password Anda',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -113,40 +135,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 if (errorMessage != null)
                   Text(
                     errorMessage!,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle forgot password
-                    },
-                    child: Text(
-                      'Lupa Password?',
-                      style: TextStyle(color: Colors.teal),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _login,
+                    onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.teal,
                     ),
-                    child: Text(
-                      'Sign In',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            'Sign In',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
               ],

@@ -5,7 +5,9 @@ import 'notifikasi_screen.dart';
 import 'profil_screen.dart';
 
 class BerandaScreen extends StatefulWidget {
-  const BerandaScreen({super.key});
+  final String? username; // Parameter untuk menerima username dari login
+
+  const BerandaScreen({Key? key, this.username}) : super(key: key);
 
   @override
   _BerandaScreenState createState() => _BerandaScreenState();
@@ -68,8 +70,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Selamat Pagi, Pak Ade',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'Selamat Pagi, ${widget.username ?? "Pengguna"}',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: Icon(Icons.notifications),
@@ -112,7 +114,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Ade Ismail, S.Kom., M.TI.',
+                      '${widget.username ?? "Pengguna"}',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
